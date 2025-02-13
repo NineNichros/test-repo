@@ -1,0 +1,56 @@
+name: Validate Static HTML and CSS
+
+on:
+  push:
+    branches:
+      - integration/login
+      - integration/register
+      - integration/css
+
+jobs:
+  validate-html-css:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        branch:
+          - integration/login
+          - integration/register
+          - integration/css
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Determine the branch being processed
+      - name: Set branch variable
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      # Validate if the current branch matches the matrix branch
+      - name: Check if branch matches
+        if: github.ref != 'refs/heads/${{ matrix.branch }}'
+        run: exit 1
+
+      - name: Install HTML/CSS validation tools
+        run: |
+          npm install -g htmlhint stylelint
+
+      - name: Validate Login HTML/CSS
+        if: env.BRANCH == 'login'
+        run: |
+          echo "Validating login feature..."
+          htmlhint ./integration/login/*.html
+          stylelint ./integration/login/*.css
+
+      - name: Validate Register HTML/CSS
+        if: env.BRANCH == 'register'
+        run: |
+          echo "Validating register feature..."
+          htmlhint ./integration/register/*.html
+          stylelint ./integration/register/*.css
+
+      - name: Validate CSS Feature
+        if: env.BRANCH == 'css'
+        run: |
+          echo "Validating CSS feature..."
+          stylelint ./integration/css/*.css
