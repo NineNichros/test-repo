@@ -1,43 +1,31 @@
-name: Validate Static HTML and CSS
+name: CI
 
 on:
   push:
     branches:
-      - integration/login
-      - integration/register
-      - integration/css
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  validate-html-css:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install HTML/CSS validation tools
-      - name: Install Validation Tools
-        run: |
-          npm install -g htmlhint stylelint
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Validate Login Feature
-        if: github.ref == 'refs/heads/integration/login'
-        run: |
-          echo "Validating login.html..."
-          htmlhint ./integration/login/login.html || exit 1
-          echo "Validating global.css..."
-          stylelint ./integration/css/global.css || exit 1
+      - name: Install dependencies
+        run: npm install
 
-      - name: Validate Register Feature
-        if: github.ref == 'refs/heads/integration/register'
-        run: |
-          echo "Validating register.html..."
-          htmlhint ./integration/register/register.html || exit 1
-          echo "Validating global.css..."
-          stylelint ./integration/css/global.css || exit 1
+      - name: Run HTMLHint
+        run: npx htmlhint index.html about.html
 
-      - name: Validate Global CSS
-        if: github.ref == 'refs/heads/integration/css'
-        run: |
-          echo "Validating global.css..."
-          stylelint ./integration/css/global.css || exit 1
+      - name: Run Puppeteer Tests
+        run: node test.js
