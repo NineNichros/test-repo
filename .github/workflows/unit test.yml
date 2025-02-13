@@ -1,11 +1,11 @@
-name: Run Unit Tests
+name: Run Unit Tests for Integration Branches
 
 on:
   push:
     branches:
-      - login
-      - register
-      - css
+      - integration/login
+      - integration/register
+      - integration/css
 
 jobs:
   test:
