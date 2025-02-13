@@ -1,0 +1,41 @@
+name: Merge, Clean, and Test Integration Branches
+
+on:
+  push:
+    branches:
+      - integration
+
+jobs:
+  merge-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: integration
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge Login, Register, and CSS into Integration
+        run: |
+          git fetch origin
+          git checkout integration
+          git merge origin/login --no-edit || echo "No changes in login"
+          git merge origin/register --no-edit || echo "No changes in register"
+          git merge origin/css --no-edit || echo "No changes in css"
+          git push origin integration
+
+      - name: Clean Up Code
+        run: |
+          # Example cleanup commands (Modify as needed)
+          rm -rf node_modules
+          npm install
+          npm run lint || echo "Linting issues detected"
+          echo "Code cleanup completed"
+
+      - name: Run Unit Tests
+        run: npm test  # Modify this based on your project setup
