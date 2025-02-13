@@ -11,46 +11,33 @@ jobs:
   validate-html-css:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        branch:
-          - integration/login
-          - integration/register
-          - integration/css
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Determine the branch being processed
-      - name: Set branch variable
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-
-      # Validate if the current branch matches the matrix branch
-      - name: Check if branch matches
-        if: github.ref != 'refs/heads/${{ matrix.branch }}'
-        run: exit 1
-
-      - name: Install HTML/CSS validation tools
+      # Install HTML/CSS validation tools
+      - name: Install Validation Tools
         run: |
           npm install -g htmlhint stylelint
 
-      - name: Validate Login HTML/CSS
-        if: env.BRANCH == 'login'
+      - name: Validate Login Feature
+        if: github.ref == 'refs/heads/integration/login'
         run: |
-          echo "Validating login feature..."
-          htmlhint ./integration/login/*.html
-          stylelint ./integration/login/*.css
+          echo "Validating login.html..."
+          htmlhint ./integration/login/login.html || exit 1
+          echo "Validating global.css..."
+          stylelint ./integration/css/global.css || exit 1
 
-      - name: Validate Register HTML/CSS
-        if: env.BRANCH == 'register'
+      - name: Validate Register Feature
+        if: github.ref == 'refs/heads/integration/register'
         run: |
-          echo "Validating register feature..."
-          htmlhint ./integration/register/*.html
-          stylelint ./integration/register/*.css
+          echo "Validating register.html..."
+          htmlhint ./integration/register/register.html || exit 1
+          echo "Validating global.css..."
+          stylelint ./integration/css/global.css || exit 1
 
-      - name: Validate CSS Feature
-        if: env.BRANCH == 'css'
+      - name: Validate Global CSS
+        if: github.ref == 'refs/heads/integration/css'
         run: |
-          echo "Validating CSS feature..."
-          stylelint ./integration/css/*.css
+          echo "Validating global.css..."
+          stylelint ./integration/css/global.css || exit 1
