@@ -3,9 +3,9 @@ name: Run Unit Tests for Integration Branches
 on:
   push:
     branches:
-      - integration/login
-      - integration/register
-      - integration/css
+      - login
+      - register
+      - css
 
 jobs:
   test:
