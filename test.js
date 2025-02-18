@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
   console.log('Testing index.html...');
   await page.goto('file://' + __dirname + '/index.html');
   const title = await page.title();
-  if (title !== 'Home Page') {
+  if (title !== 'E-Commerce Home Page') {
     console.error('Test failed: Title mismatch for index.html');
     process.exit(1);
   }
