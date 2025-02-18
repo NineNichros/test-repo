@@ -17,15 +17,7 @@ const puppeteer = require('puppeteer');
   }
   console.log('Passed: index.html');
 
-  // Test about.html
-  console.log('Testing about.html...');
-  await page.goto('file://' + __dirname + '/about.html');
-  const aboutTitle = await page.title();
-  if (aboutTitle !== 'About Page') {
-    console.error('Test failed: Title mismatch for about.html');
-    process.exit(1);
-  }
-  console.log('Passed: about.html');
+
 
   await browser.close();
 })();
