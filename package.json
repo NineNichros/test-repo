@@ -1,12 +1,24 @@
 {
   "name": "test-repo",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple static HTML/CSS project with Puppeteer",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server .",
+    "build": "echo \"No build process defined\"",
+    "puppeteer-test": "node puppeteer-script.js"
   },
-  "keywords": [],
+  "keywords": [
+    "html",
+    "css",
+    "static",
+    "puppeteer"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.0",
+    "puppeteer": "^20.0.0"
+  }
 }
