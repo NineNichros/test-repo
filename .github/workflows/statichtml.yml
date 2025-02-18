@@ -28,4 +28,4 @@ jobs:
         run: npx htmlhint index.html about.html
 
       - name: Run Puppeteer Tests
-        run: node test.js
+        run: npm test.js
